@@ -5,7 +5,7 @@
 #include <iomanip>
 using namespace std;
 
-double T0=0.1;
+double T0=0.15;
 double D0=0.5;
 
 class Neuron{
@@ -84,25 +84,9 @@ public:
             }
             Layers.push_back(new Layer(temp,1,s,1));
         for(int i=0;i<s;i++)Layers[n-1]->SetW(0,i,1);
-//         Layer L1(&Input,n,n,n);
-//     for(int i=0;i<n;i++){
-//         vector<double> In(n,0);
-//         In[i]=Input.size();
-//         L1[i]->GetW(&In);
-//     }
-//     
-//     cout<<"Input:   ";
-//     for(int i=0;i<Input.size();i++)cout<<Input[i]<<" ";
-//     cout<<endl;
-//     L1.Fire();
-//     cout<<"Layer 1: ";
-//     L1.Show();
-//     Layer L2(L1.ShowOutput(),n,n,n);
-//     L2.Fire();
-//     cout<<"Layer 2: ";
-//     L2.Show();
-//      
     }
+    
+    
     
     double Fire(int f=0){
         vector<double> *out;
@@ -146,20 +130,38 @@ int main(int argc, char**argv){
         cout<<inn[i]<<" ";
     }
     cout<<endl;
+      while(true){cout<<endl;
     Net Siec(&Input,1,5);
-    double a=Siec.Fire(1);
+    double a=Siec.Fire();
     double b=a;
     int ii=0;
-/*    while(b-a<=DD){
+    int jj=0;
+    cout<<setprecision(20)<<a<<endl;
+  
+   while(b-a<=DD){
 //     for(int i=0;i<100;i++){
-    Siec.Switch(rand()%4,rand()%16,rand()%16);
-    b=Siec.Fire();
-    ii++;
-    if(ii%1000==0)cout<<"\r"<<ii<<flush;
+       int K=10;
+       int aa[K],bb[K],cc[K];
+       for(int i=0;i<K;i++){
+       aa[i]=rand()%4;
+       bb[i]=rand()%16;
+       cc[i]=rand()%16;
+       if(aa[i]==4)bb[i]=0;
+    Siec.Switch(aa[i],bb[i],cc[i]);
     }
-    cout<<endl;
-    cout<<setprecision(99)<<b-a<<endl;
+    b=Siec.Fire();
+    if(b-a>0){a=b;
+    cout<<"\r"<<ii<<"\t"<<setprecision(20)<<b<<endl;
+        jj=0;
+    }
+    else
+        for(int i=0;i<K;i++)Siec.Switch(aa[i],bb[i],cc[i]);
+    cerr<<"\r"<<ii++<<flush;
+    jj++;
+    if(jj>1e6)break;
+    }}
+//     cout<<setprecision(99)<<b-a<<endl;
 //     vector<double>* Output=L2.ShowOutput();
     
-           */ 
 }
+
