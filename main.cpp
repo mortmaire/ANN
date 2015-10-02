@@ -181,27 +181,29 @@ int main(){
     double dTab[N2];
     double dTab2[N2];
     
-    for(int i=0;i<100000;i++){
+    for(int i=0;i<100;i++){
         for(int j=0;j<N;j++){tab2[j]=(rand()%3-1);}
         for(int j=0;j<N2;j++){
-            tTab2[j]=rand()%100+1;
+            tTab2[j]=rand()%100;
             dTab2[j]=rand()%100/100.;
         }
         Siec.SetW(tab2);
-//         cout<<"aa"<<endl;
         Siec.SetT(tTab2);
         Siec.SetD(dTab2);
         double a=Siec.Fire(Signal);
         double b=Siec.Fire(WhiteNoise);
         double c=Siec.Fire(BlackNoise);
-if(min<a-b-c){         
+      
         cout<<i<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<a-b-c<<endl;
+        if(min<a-b-c){   
         min=a-b-c;
         for(int j=0;j<N;j++)tab[j]=tab2[j];
         for(int j=0;j<N2;j++)tTab[j]=tTab2[j];
         for(int j=0;j<N2;j++)dTab[j]=dTab2[j];
 }
     }
+
+    
     for(int i=0;i<1000000;i++){
     int k=rand()%N;
     double v=tab[k];
@@ -220,7 +222,12 @@ if(min<a-b-c){
     double c=Siec.Fire(BlackNoise);
     if(a-b-c<=min){tab[k]=v;tTab[k2]=v2;dTab[k3]=v3;}
     else{min=a-b-c;cout<<i<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<min<<endl;}
+    if(min==1-1e-16)break;
         
     }
-    cout<<"Cześć pracy!"<<endl;
+//     cout<<"Cześć pracy!"<<endl;
+    Siec.Fire(Signal,1);
+    Siec.Fire(WhiteNoise,1);
+    Siec.Fire(BlackNoise,1);
+    
 }
