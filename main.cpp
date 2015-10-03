@@ -65,8 +65,8 @@ public:
     void Fire(int f=0){
         for(int i=0;i<Neurons.size();i++){Output[i]=Neurons[i].Fire(Input);}
         if(f)for(int i=0;i<Output.size();i++)
-            cout<<fixed<<setprecision(2)<<Output[i]<<" ";
-        if(f)cout<<endl;
+            cerr<<fixed<<setprecision(2)<<Output[i]<<" ";
+        if(f)cerr<<endl;
         
     }
 
@@ -91,7 +91,7 @@ public:
     }
     double Fire(vector<double> Input,int f=0){
         for(int i=0;i<Layers.size();i++){
-            if(f)cout<<"Layer "<<(i<10?" ":"")<<i<<": ";
+            if(f)cerr<<"Layer "<<(i<10?" ":"")<<i<<": ";
             Layers[i].Input=Input;
             Layers[i].Fire(f);
             Input=Layers[i].Output;
@@ -137,11 +137,11 @@ public:
 //             for(int j=0;j<s;j++)
 //                 for(int k=0;k<s;k++){
 //                     tab[i*s*s+j*s+k]=Layers[i].Neurons[j].W[k];
-//                     cout<<i*s*s+j*s+k<<endl;
+//                     cerr<<i*s*s+j*s+k<<endl;
 //                 }
 //         for(int i=0;i<s;i++){
 //             tab[(L-1)*s*s+i]=Layers[L-1].Neurons[0].W[i];
-//             cout<<i<<endl;
+//             cerr<<i<<endl;
 //         }
 //     }
 };
@@ -165,19 +165,19 @@ int main(){
     
     vector<double> BlackNoise(inn,inn+n);
     
-    for(int i=0;i<n;i++)cout<<Signal[i]<<" ";
-    cout<<endl;
-    for(int i=0;i<n;i++)cout<<WhiteNoise[i]<<" ";
-    cout<<endl;
-    for(int i=0;i<n;i++)cout<<BlackNoise[i]<<" ";
-    cout<<endl;
+    for(int i=0;i<n;i++)cerr<<Signal[i]<<" ";
+    cerr<<endl;
+    for(int i=0;i<n;i++)cerr<<WhiteNoise[i]<<" ";
+    cerr<<endl;
+    for(int i=0;i<n;i++)cerr<<BlackNoise[i]<<" ";
+    cerr<<endl;
     int N=4*n*n+n;
     int N2=N/n;
     double tab[N];
     double tab2[N];
     Net Siec=Net(Signal,1,5);
-//     for(int i=0;i<N;i++)cout<<Siec.SetW(i)<<endl;
-//     cout<<N<<endl;
+//     for(int i=0;i<N;i++)cerr<<Siec.SetW(i)<<endl;
+//     cerr<<N<<endl;
     double min=0;
     double tTab[N2];
     double tTab2[N2];
@@ -197,7 +197,7 @@ int main(){
         double b=Siec.Fire(WhiteNoise);
         double c=Siec.Fire(BlackNoise);
       
-        cout<<i<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<a-b-c<<endl;
+        cerr<<i<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<a-b-c<<endl;
         if(min<a-b-c){   
         min=a-b-c;
         for(int j=0;j<N;j++)tab[j]=tab2[j];
@@ -224,11 +224,11 @@ int main(){
     double b=Siec.Fire(WhiteNoise);
     double c=Siec.Fire(BlackNoise);
     if(a-b-c<=min){tab[k]=v;tTab[k2]=v2;dTab[k3]=v3;}
-    else{min=a-b-c;cout<<i<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<min<<endl;}
+    else{min=a-b-c;cerr<<i<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<min<<endl;}
     if(min==1-1e-16)break;
         
     }
-//     cout<<"Cześć pracy!"<<endl;
+//     cerr<<"Cześć pracy!"<<endl;
     Siec.Fire(Signal,1);
     Siec.Fire(WhiteNoise,1);
     Siec.Fire(BlackNoise,1);
@@ -236,26 +236,26 @@ int main(){
 }*/
 
 int main(){
-    int nn=16;
+    int nn=8;
     int n=nn*nn;
     vector<double> letterA;
     vector<double> letterB;
     image<rgb_pixel> imageA(nn,nn),imageB(nn,nn);
-    imageA.read("aa.png");
-    imageB.read("bb.png");
+    imageA.read("a1.png");
+    imageB.read("b1.png");
     for(int i=0;i<n;i++){
         rgb_pixel a=imageA[i/nn][i%nn];
         letterA.push_back(((int)a.red)==255?0:1);
         a=imageB[i/nn][i%nn];
         letterB.push_back(((int)a.red)==255?0:1);
-        if(i%nn==0)cout<<endl;
-        cout<<letterA[i];
+        if(i%nn==0)cerr<<endl;
+        cerr<<letterA[i];
     }
     int N=4*n*n+n;
     int N2=N/n;
     Net Siec=Net(letterA,1,5);
-// //     for(int i=0;i<N;i++)cout<<Siec.SetW(i)<<endl;
-// //     cout<<N<<endl;
+// //     for(int i=0;i<N;i++)cerr<<Siec.SetW(i)<<endl;
+// //     cerr<<N<<endl;
     double min=0;
     double tab[N];
     double tab2[N];
@@ -264,22 +264,22 @@ int main(){
     double dTab[N2];
     double dTab2[N2];
     
-    cout<<endl;
+    cerr<<endl;
     
     for(int i=0;i<10000;i++){
         for(int j=0;j<N;j++){tab2[j]=(rand()%3-1);}
         for(int j=0;j<N2;j++){
-            tTab2[j]=rand()%100;
-            dTab2[j]=rand()%100/100.;
+            tTab2[j]=rand()%2*100;
+            dTab2[j]=rand()%2;
         }
         Siec.SetW(tab2);
         Siec.SetT(tTab2);
         Siec.SetD(dTab2);
         double a=Siec.Fire(letterA);
         double b=Siec.Fire(letterB);
-        cout<<"\r"<<i<<flush;
+//         cerr<<"\r"<<i<<flush;
         if(min<a-b){
-            cout<<"\r"<<i<<"\t"<<a<<"\t"<<b<<"\t"<<a-b<<endl;
+            cerr<<"\r"<<i<<"\t"<<a<<"\t"<<b<<"\t"<<a-b<<endl;
             min=a-b;
             for(int j=0;j<N;j++)tab[j]=tab2[j];
             for(int j=0;j<N2;j++)tTab[j]=tTab2[j];
@@ -288,6 +288,7 @@ int main(){
     }
 
     int i=0;
+    double t=time(0);
     while(true){
     int k=rand()%N;
     double v=tab[k];
@@ -296,17 +297,20 @@ int main(){
     int k3=rand()%N2;
     double v3=dTab[k3];
     tab[k]=rand()%3-1;
-    tTab[k2]=rand()%100;
-    dTab[k3]=rand()%100/100.;
+    tTab[k2]=rand()%3/2.*100;
+    dTab[k3]=rand()%3/2.;
     Siec.SetW(tab);
     Siec.SetT(tTab);
     Siec.SetD(dTab);
     double a=Siec.Fire(letterA);
     double b=Siec.Fire(letterB);
-    cout<<"\r"<<i++<<flush;
+//     cerr<<"\r"<<i++<<flush;
+    i++;
     if(a-b<=min){tab[k]=v;tTab[k2]=v2;dTab[k3]=v3;}
-    else{min=a-b;cout<<"\r"<<i<<scientific<<setprecision(6)<<"\t"<<a<<"\t"<<b<<"\t"<<min<<endl;}
-    if(min==0.9999)break;
+    else{min=a-b;cerr<<"\r"<<i<<scientific<<setprecision(6)<<"\t"<<a<<"\t"<<b<<"\t"<<min<<"\t"<<fixed<<(int)(i/(time(0)-t))<<endl;
+        cout<<i<<"\t"<<min<<endl;
+    }
+    if(min>0.9999)break;
         
     }
 //     Siec.Fire(letterA,1);
